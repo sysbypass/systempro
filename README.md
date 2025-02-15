@@ -21,6 +21,9 @@ For full functionality, SystemPro needs to run with administrator privileges. Us
 - Node.js
 - PowerShell
 
+## Packages
+- `Electron`
+- 
 ## License
 MIT License - feel free to use and modify as needed.
 
