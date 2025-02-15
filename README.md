@@ -1,5 +1,6 @@
 ![Static Badge](https://img.shields.io/badge/SYSTEMPRO-ff6b6b?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/NodeJS-yellow?style=for-the-badge)
 
+# SystemPro
 Lightweight system optimization tool built with Electron. Features a clean, modern dark interface and provides essential Windows system maintenance tools.
 
 ## Features
