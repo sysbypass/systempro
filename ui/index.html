@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SystemPro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .titlebar {
+            height: 32px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            -webkit-app-region: drag;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .titlebar-button {
+            -webkit-app-region: no-drag;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .titlebar-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .text {
+            color: #ff6b6b;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .beta-tag {
+            font-size: 10px;
+            background: #ff6b6b;
+            color: #1a1a1a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        svg {
+            width: 16px;
+            height: 16px;
+            fill: #888;
+            transition: fill 0.2s;
+        }
+
+        .titlebar-button:hover svg {
+            fill: #fff;
+        }
+
+        .titlebar-button.close:hover svg {
+            fill: #ececec;
+        }
+
+        .content {
+            background: #222222;
+            height: calc(100vh - 32px);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 1px;
+            background: #333;
+            margin: 4px 0;
+        }
+
+        .section-subtitle {
+            color: #888;
+            font-size: 13px;
+            margin-top: -8px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: #ff6b6b;
+        }
+
+        .stat-title {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-title svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .stat-value {
+            color: #ff6b6b;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .action-button {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            color: #888;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .action-button svg {
+            width: 24px;
+            height: 24px;
+            fill: #888;
+        }
+
+        .action-button:hover {
+            background: #ff6b6b;
+            color: #1a1a1a;
+            border-color: #ff6b6b;
+            transform: translateY(-2px);
+        }
+
+        .action-button:hover svg {
+            fill: #1a1a1a;
+        }
+
+        .action-button .button-label {
+            font-size: 14px;
+        }
+
+        .action-button .button-description {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: -4px;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: #fff;
+            transform: translateY(150%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="titlebar">
+        <h1 class="text">
+            SystemPro
+            <span class="beta-tag">BETA</span>
+        </h1>
+        <div class="titlebar-controls">
+            <button class="titlebar-button minimize">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 14H4v-2h16v2z"/>
+                </svg>
+            </button>
+            <button class="titlebar-button close">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">System Information</h2>
+            </div>
+            <div class="section-subtitle">Real-time monitoring of your system resources</div>
+            <div class="divider"></div>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-title">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2 2v20h20V2H2zm18 18H4V4h16v16zm-2-2H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V8h12v2z"/>
+                        </svg>
+                        RAM Usage
+                    </div>
+                    <div class="stat-value" id="ram-usage">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M15 4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                            <path d="M3 12c0-2.61 1.67-4.83 4-5.65V4.26C3.55 5.15 1 8.27 1 12s2.55 6.85 6 7.74v-2.09c-2.33-.82-4-3.04-4-5.65z"/>
+                        </svg>
+                        CPU Usage
+                    </div>
+                    <div class="stat-value" id="cpu-usage">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>
+                        </svg>
+                        Disk Space
+                    </div>
+                    <div class="stat-value" id="disk-space">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-subtitle">Tools to improve your system performance:</div>
+            <div class="divider"></div>
+            <div class="action-buttons">
+                <button class="action-button" id="optimize-ram">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17 16h-6l2-4h-4l-2 4H4l4-8h4l-2 4h4l3-6h4l-4 8h4z"/>
+                    </svg>
+                    <span class="button-label">Optimize RAM</span>
+                    <span class="button-description">Free up memory</span>
+                </button>
+                <button class="action-button" id="clean-disk">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                    <span class="button-label">Clean Disk</span>
+                    <span class="button-description">Remove temporary files</span>
+                </button>
+                <button class="action-button" id="network-flush">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+                    </svg>
+                    <span class="button-label">Network Boost</span>
+                    <span class="button-description">Reset network cache</span>
+                </button>
+                <button class="action-button" id="startup-optimize">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
+                    </svg>
+                    <span class="button-label">Startup Boost</span>
+                    <span class="button-description">Optimize startup items</span>
+                </button>
+                <button class="action-button" id="services-optimize">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                    <span class="button-label">Services</span>
+                    <span class="button-description">Optimize system services</span>
+                </button>
+                <button class="action-button" id="power-optimize">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16.01 7L16 3h-2v4h-4V3H8v4h-.01C7 6.99 6 7.99 6 8.99v5.49L9.5 18v3h5v-3l3.5-3.51v-5.5c0-1-1-2-1.99-1.99z"/>
+                    </svg>
+                    <span class="button-label">Power Mode</span>
+                    <span class="button-description">Toggle performance mode</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">Action completed successfully!</div>
+
+    <script>
+        document.querySelector('.minimize').addEventListener('click', () => {
+            window.electronAPI.minimizeWindow();
+        });
+
+        document.querySelector('.close').addEventListener('click', () => {
+            window.electronAPI.closeWindow();
+        });
+
+        document.querySelector('#optimize-ram').addEventListener('click', () => {
+            window.electronAPI.optimizeRAM();
+            showNotification('Optimizing RAM...');
+        });
+
+        document.querySelector('#clean-disk').addEventListener('click', () => {
+            window.electronAPI.cleanDisk();
+        });
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        document.querySelector('#network-flush').addEventListener('click', () => {
+            window.electronAPI.flushNetwork();
+            showNotification('Network cache cleared successfully!');
+        });
+
+        document.querySelector('#startup-optimize').addEventListener('click', () => {
+            window.electronAPI.optimizeStartup();
+            showNotification('Startup items optimized!');
+        });
+
+        document.querySelector('#services-optimize').addEventListener('click', () => {
+            window.electronAPI.optimizeServices();
+            showNotification('System services optimized!');
+        });
+
+        document.querySelector('#power-optimize').addEventListener('click', () => {
+            window.electronAPI.togglePowerMode();
+            showNotification('Performance mode toggled!');
+        });
+
+        window.electronAPI.onStatsUpdate((event, stats) => {
+            document.querySelector('#ram-usage').textContent = stats.ram;
+            document.querySelector('#cpu-usage').textContent = stats.cpu;
+            document.querySelector('#disk-space').textContent = stats.disk;
+        });
+
+        window.electronAPI.onNotification((event, message) => {
+            showNotification(message);
+        });
+    </script>
+</body>
+</html>
