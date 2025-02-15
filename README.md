@@ -14,4 +14,16 @@ Lightweight system optimization tool built with Electron. Features a clean, mode
 ## Screenshots
 [Add screenshots here]
 
-## Installation
+## Running with Admin Rights
+For full functionality, SystemPro needs to run with administrator privileges. Use the included `run-admin.bat` or run the executable as administrator.
+
+## Built With
+- Electron
+- Node.js
+- PowerShell
+
+## License
+MIT License - feel free to use and modify as needed.
+
+## Note
+This is a beta version. Use at your own risk. Always backup important data before using system optimization tools.
