@@ -13,9 +13,6 @@ Lightweight system optimization tool built with Electron. Features a clean, mode
 - Service optimizer
 - Power mode management
 
-## Screenshots
-[Add screenshots here]
-
 ## Running with Admin Rights
 For full functionality, SystemPro needs to run with administrator privileges. Use the included `run-admin.bat` or run the executable as administrator.
 
